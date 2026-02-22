@@ -78,10 +78,24 @@ const Home = () => {
           </div>
         </section>
 
+        {/* B9: Promo Tiles (Foxtrot-style) */}
+        <section className="ys-section-sm">
+          <div className="ys-container">
+            <PromoTiles />
+          </div>
+        </section>
+
         {/* Popular Categories */}
         <section className="ys-section-sm">
           <div className="ys-container">
             <PopularCategories />
+          </div>
+        </section>
+
+        {/* B9: Mini Banners Row */}
+        <section className="ys-section-sm">
+          <div className="ys-container">
+            <MiniBannersRow />
           </div>
         </section>
 
