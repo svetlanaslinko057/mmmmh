@@ -231,6 +231,115 @@ async def search_products(
     }
 
 
+@router.get("/api/v2/products/search")
+async def catalog_search_products(
+    q: str = Query("", description="Search query"),
+    category: str = Query("", description="Category slug"),
+    sort: str = Query("pop", description="Sort: pop|price_asc|price_desc|rating|new"),
+    min: int = Query(0, description="Min price"),
+    max: int = Query(0, description="Max price"),
+    in_stock: str = Query("", description="1 for in stock only"),
+    rating_gte: int = Query(0, description="Min rating"),
+    brands: str = Query("", description="Comma-separated brands"),
+    page: int = 1,
+    limit: int = 24,
+    lang: str = "uk"
+):
+    """
+    Full catalog search with filters (B10/B13)
+    Returns products + meta (available brands, price range)
+    """
+    query = {"status": "published"}
+    
+    # Search query
+    if q.strip():
+        rx = re.compile(re.escape(q.strip()), re.IGNORECASE)
+        query["$or"] = [{"title": rx}, {"brand": rx}, {"description": rx}]
+    
+    # Category filter
+    if category:
+        query["$or"] = query.get("$or", [])
+        query["$and"] = query.get("$and", [])
+        query["$and"].append({"$or": [
+            {"category_name": re.compile(re.escape(category), re.IGNORECASE)},
+            {"category_id": category},
+            {"category_slug": category}
+        ]})
+    
+    # Price filter
+    if min > 0:
+        query["price"] = query.get("price", {})
+        query["price"]["$gte"] = min
+    if max > 0:
+        query["price"] = query.get("price", {})
+        query["price"]["$lte"] = max
+    
+    # In stock filter
+    if in_stock == "1":
+        query["stock_level"] = {"$gt": 0}
+    
+    # Rating filter
+    if rating_gte > 0:
+        query["rating"] = {"$gte": rating_gte}
+    
+    # Brands filter
+    if brands:
+        brand_list = [b.strip() for b in brands.split(",") if b.strip()]
+        if brand_list:
+            query["brand"] = {"$in": brand_list}
+    
+    # Clean up query
+    if "$and" in query and not query["$and"]:
+        del query["$and"]
+    
+    # Sort
+    sort_map = {
+        "pop": [("popularity", -1), ("rating", -1)],
+        "price_asc": [("price", 1)],
+        "price_desc": [("price", -1)],
+        "rating": [("rating", -1)],
+        "new": [("created_at", -1)]
+    }
+    sort_order = sort_map.get(sort, sort_map["pop"])
+    
+    skip = (page - 1) * limit
+    
+    cursor = db.products.find(query, {"_id": 0}).sort(sort_order).skip(skip).limit(limit)
+    products = await cursor.to_list(limit)
+    
+    total = await db.products.count_documents(query)
+    pages = max(1, (total + limit - 1) // limit)
+    
+    # Get meta for filters (available brands, price range)
+    all_brands = []
+    price_min = 0
+    price_max = 0
+    try:
+        brands_cursor = db.products.distinct("brand", {"status": "published"})
+        all_brands = [b for b in brands_cursor if b][:30]
+        
+        price_agg = await db.products.aggregate([
+            {"$match": {"status": "published", "price": {"$gt": 0}}},
+            {"$group": {"_id": None, "min": {"$min": "$price"}, "max": {"$max": "$price"}}}
+        ]).to_list(1)
+        if price_agg:
+            price_min = price_agg[0].get("min", 0)
+            price_max = price_agg[0].get("max", 0)
+    except Exception:
+        pass
+    
+    return {
+        "items": products,
+        "total": total,
+        "page": page,
+        "pages": pages,
+        "meta": {
+            "brands": all_brands,
+            "price": {"min": price_min, "max": price_max}
+        }
+    }
+
+
 # ============= PRODUCT V2 ENDPOINTS =============
 
 @router.get("/api/v2/products/{product_id}/related")
