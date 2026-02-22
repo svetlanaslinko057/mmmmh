@@ -145,24 +145,59 @@ async def categories_tree():
 
 # ============= SEARCH =============
 
+POPULAR_QUERIES_UK = ["айфон", "ноутбук", "пилосос", "телевізор", "пральна машина", "павербанк", "навушники"]
+POPULAR_QUERIES_RU = ["айфон", "ноутбук", "пылесос", "телевизор", "стиральная машина", "пауэрбанк", "наушники"]
+
 @router.get("/api/v2/search/suggest")
-async def search_suggest(q: str = Query("", min_length=1), limit: int = 8):
+async def search_suggest(q: str = Query("", min_length=0), limit: int = 8, lang: str = "uk"):
     """
-    Live search suggestions
+    Live search suggestions with categories and popular queries (B11)
     """
     q = q.strip()
+    popular_pool = POPULAR_QUERIES_RU if lang == "ru" else POPULAR_QUERIES_UK
+    
     if not q or len(q) < 2:
-        return {"products": []}
+        return {
+            "products": [],
+            "categories": [],
+            "popular": popular_pool[:5]
+        }
     
     rx = re.compile(re.escape(q), re.IGNORECASE)
     
+    # Get categories
+    categories = []
+    try:
+        cat_cursor = db.categories.find(
+            {"$or": [
+                {"name": rx},
+                {"slug": rx}
+            ]},
+            {"_id": 0, "id": 1, "name": 1, "slug": 1, "icon": 1}
+        ).limit(6)
+        cat_docs = await cat_cursor.to_list(6)
+        categories = [{"slug": c.get("slug"), "name": c.get("name"), "icon": c.get("icon", "Package")} for c in cat_docs]
+    except Exception:
+        categories = []
+    
+    # Get products
     cursor = db.products.find(
         {"$or": [{"title": rx}, {"brand": rx}, {"description": rx}]},
-        {"_id": 0, "id": 1, "title": 1, "price": 1, "compare_price": 1, "images": 1, "category_name": 1, "stock_level": 1, "rating": 1}
+        {"_id": 0, "id": 1, "title": 1, "name": 1, "price": 1, "compare_price": 1, "images": 1, "category_name": 1, "stock_level": 1, "rating": 1, "slug": 1}
     ).limit(limit)
     
     items = await cursor.to_list(limit)
-    return {"products": items}
+    
+    # Popular queries that match
+    popular = [x for x in popular_pool if q.lower() in x.lower()][:5]
+    if len(popular) < 3:
+        popular = (popular + popular_pool)[:5]
+    
+    return {
+        "products": items,
+        "categories": categories,
+        "popular": popular
+    }
 
 
 @router.get("/api/v2/search")
