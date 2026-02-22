@@ -1,9 +1,17 @@
+/**
+ * ActiveFilterChips - показывает активные фильтры с возможностью удаления
+ */
 import React from "react";
 
 function Chip({ label, onRemove }) {
   return (
-    <button type="button" className="ys-chip" onClick={onRemove} aria-label={`Remove ${label}`}>
-      <span>{label}</span>
+    <button 
+      type="button" 
+      className="ys-chip" 
+      onClick={onRemove} 
+      aria-label={`Видалити ${label}`}
+    >
+      <span className="ys-chip__label">{label}</span>
       <span className="ys-chip__x">×</span>
     </button>
   );
@@ -65,14 +73,35 @@ export default function ActiveFilterChips({ filters, onChange, onClearAll }) {
     });
   }
 
+  if (filters?.sort && filters.sort !== "pop") {
+    const map = {
+      new: "Нові",
+      price_asc: "Ціна ↑",
+      price_desc: "Ціна ↓",
+      rating_desc: "Рейтинг",
+    };
+    chips.push({
+      key: "sort",
+      label: `Сортування: ${map[filters.sort] || filters.sort}`,
+      remove: () => onChange({ ...filters, sort: "pop" }),
+    });
+  }
+
   if (!chips.length) return null;
 
   return (
-    <div className="ys-chips">
-      {chips.map((c) => (
-        <Chip key={c.key} label={c.label} onRemove={c.remove} />
-      ))}
-      <button type="button" className="ys-link" onClick={onClearAll}>
+    <div className="ys-chips" style={{ marginBottom: 16, alignItems: "center", justifyContent: "flex-start" }}>
+      <div className="ys-chips__row">
+        {chips.map((c) => (
+          <Chip key={c.key} label={c.label} onRemove={c.remove} />
+        ))}
+      </div>
+      <button 
+        type="button" 
+        className="ys-link" 
+        onClick={onClearAll}
+        style={{ marginLeft: 12 }}
+      >
         Скинути все
       </button>
     </div>
