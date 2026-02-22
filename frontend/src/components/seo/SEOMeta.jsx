@@ -23,7 +23,7 @@ const DEFAULT_DESCRIPTION = 'Y-Store - інтернет-магазин елек�
  * @param {string} props.keywords - SEO keywords
  */
 export default function SEOMeta({
-  title,
+  title = '',
   description = DEFAULT_DESCRIPTION,
   image = DEFAULT_IMAGE,
   url,
@@ -32,7 +32,9 @@ export default function SEOMeta({
   breadcrumbs = null,
   keywords = 'електроніка, смартфони, техніка, інтернет-магазин, Україна'
 }) {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+  // Ensure title is always a string
+  const safeTitle = String(title || '');
+  const fullTitle = safeTitle ? `${safeTitle} | ${SITE_NAME}` : SITE_NAME;
   const canonicalUrl = url ? `${SITE_URL}${url}` : SITE_URL;
 
   return (
