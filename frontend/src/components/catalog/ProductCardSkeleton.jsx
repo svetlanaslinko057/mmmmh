@@ -5,6 +5,7 @@ export default function ProductCardSkeleton() {
     <div className="ys-pcard ys-pcard-skel" aria-hidden="true">
       <div className="ys-pcard-media">
         <div className="ys-skel ys-skel-badge" />
+        <div className="ys-skel ys-skel-actions" />
         <div className="ys-imgbox">
           <div className="ys-skel ys-skel-img" />
         </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toggleCompare, isInCompare } from "../utils/compare";
 
 const formatUAH = (v) => {
   const n = Number(v || 0);
@@ -18,10 +19,40 @@ export default function ProductCardCompact({ product }) {
 
   const inStock = p.in_stock !== false && (p.stock_level === undefined || p.stock_level > 0);
 
+  const onCompare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      toggleCompare(p?.id);
+    } catch {}
+  };
+
+  const compared = (() => {
+    try {
+      return isInCompare(p?.id);
+    } catch {
+      return false;
+    }
+  })();
+
   return (
     <Link to={`/product/${p.slug || p.id}`} className="ys-pcard" aria-label={title} data-testid="product-card">
       <div className="ys-pcard-media">
         {discount ? <div className="ys-badge-discount">-{discount}%</div> : null}
+
+        <div className="ys-pcard-actions">
+          <button
+            type="button"
+            className={`ys-iconbtn ${compared ? "is-active" : ""}`}
+            onClick={onCompare}
+            aria-label="Порівняти"
+            title="Порівняти"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 6h18M3 12h18M3 18h18"/>
+            </svg>
+          </button>
+        </div>
 
         <div className="ys-imgbox">
           {img ? (
@@ -33,7 +64,13 @@ export default function ProductCardCompact({ product }) {
               className="ys-pcard-img"
             />
           ) : (
-            <div className="ys-img-placeholder">📦</div>
+            <div className="ys-img-placeholder">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.4">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+              </svg>
+            </div>
           )}
         </div>
       </div>
@@ -50,9 +87,19 @@ export default function ProductCardCompact({ product }) {
 
           {p.rating ? (
             <span className="ys-rating" title="Рейтинг">
-              ⭐ {Number(p.rating).toFixed(1)}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: 3, verticalAlign: 'middle'}}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              {Number(p.rating).toFixed(1)}
             </span>
-          ) : null}
+          ) : (
+            <span className="ys-rating ys-muted">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: 3, verticalAlign: 'middle', opacity: 0.5}}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              0.0
+            </span>
+          )}
         </div>
 
         <div className="ys-pcard-footer">
@@ -61,8 +108,8 @@ export default function ProductCardCompact({ product }) {
             {oldPrice ? <div className="ys-price-old">{formatUAH(oldPrice)}</div> : null}
           </div>
 
-          <button className="ys-btn ys-btn-cart" type="button" onClick={(e) => e.preventDefault()}>
-            У кошик
+          <button className="ys-btn ys-btn-primary" type="button" onClick={(e) => e.preventDefault()}>
+            Купити
           </button>
         </div>
       </div>
