@@ -258,12 +258,12 @@ export default function SearchInput({ className = "", onClose }) {
                         {p.images?.[0] && (
                           <img 
                             src={p.images[0]} 
-                            alt={p.name} 
+                            alt={p.title || p.name} 
                             className="w-10 h-10 object-cover rounded-lg border border-gray-100"
                           />
                         )}
                         <span className="font-medium">
-                          <Highlight text={p.name || ""} query={q} />
+                          <Highlight text={p.title || p.name || ""} query={q} />
                         </span>
                       </div>
                       <span className="font-bold text-blue-600">{p.price} грн</span>
