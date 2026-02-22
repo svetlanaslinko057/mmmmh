@@ -67,6 +67,14 @@ const Home = () => {
 
   return (
     <>
+      <SEO 
+        title="Y-store - Інтернет-магазин електроніки №1 в Україні"
+        description="Y-store - найкращий інтернет-магазин електроніки в Україні. Смартфони, ноутбуки, побутова техніка за найкращими цінами."
+        keywords="інтернет магазин електроніки, купити смартфон україна, ноутбуки київ"
+      />
+      <OrganizationSchema />
+      <WebSiteSchema />
+      <LocalBusinessSchema />
       
       {/* RETAIL LAYOUT CORE v1 */}
       <main data-testid="home-page">
