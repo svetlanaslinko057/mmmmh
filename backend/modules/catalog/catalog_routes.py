@@ -236,8 +236,8 @@ async def catalog_search_products(
     q: str = Query("", description="Search query"),
     category: str = Query("", description="Category slug"),
     sort: str = Query("pop", description="Sort: pop|price_asc|price_desc|rating|new"),
-    min: int = Query(0, description="Min price"),
-    max: int = Query(0, description="Max price"),
+    min_price: int = Query(0, description="Min price", alias="min"),
+    max_price: int = Query(0, description="Max price", alias="max"),
     in_stock: str = Query("", description="1 for in stock only"),
     rating_gte: int = Query(0, description="Min rating"),
     brands: str = Query("", description="Comma-separated brands"),
@@ -267,12 +267,12 @@ async def catalog_search_products(
         ]})
     
     # Price filter
-    if min > 0:
+    if min_price > 0:
         query["price"] = query.get("price", {})
-        query["price"]["$gte"] = min
-    if max > 0:
+        query["price"]["$gte"] = min_price
+    if max_price > 0:
         query["price"] = query.get("price", {})
-        query["price"]["$lte"] = max
+        query["price"]["$lte"] = max_price
     
     # In stock filter
     if in_stock == "1":
