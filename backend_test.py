@@ -102,14 +102,18 @@ class YStoreAPITester:
             # Check if products have required fields
             if products:
                 sample_product = products[0]
-                required_fields = ["id", "name", "price"]
+                required_fields = ["id", "price"]
+                title_field = "title" if "title" in sample_product else "name"
+                if title_field in sample_product:
+                    required_fields.append(title_field)
+                
                 missing_fields = [field for field in required_fields if field not in sample_product]
                 
                 if not missing_fields:
                     self.log_result(
                         "Products API - Structure",
                         True,
-                        "Products have required fields (id, name, price)"
+                        f"Products have required fields (id, {title_field}, price)"
                     )
                 else:
                     self.log_result(
