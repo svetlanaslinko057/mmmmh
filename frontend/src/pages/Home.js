@@ -20,7 +20,9 @@ import {
   ProductSection,
   RecentlyViewed,
   NewsletterBlock,
-  NewArrivals
+  NewArrivals,
+  PromoTiles,
+  MiniBannersRow
 } from '../components/home';
 
 const Home = () => {
