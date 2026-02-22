@@ -1,3 +1,6 @@
+/**
+ * FiltersSidebar V2 - Foxtrot-style with Apply/Reset + Collapses
+ */
 import React, { useEffect, useMemo, useState } from "react";
 
 function clampNum(x, min, max) {
@@ -22,14 +25,18 @@ function Section({ title, open, onToggle, children }) {
 
 export default function FiltersSidebar({ value, onApply, onReset, brands = [] }) {
   // draft state (черновик)
-  const [draft, setDraft] = useState(value);
+  const [draft, setDraft] = useState(value || {});
+  const [priceMin, setPriceMin] = useState(value?.priceMin ?? "");
+  const [priceMax, setPriceMax] = useState(value?.priceMax ?? "");
 
-  // sync draft when value changed externally
+  // sync draft when URL/value changed externally
   useEffect(() => {
-    setDraft(value);
+    setDraft(value || {});
+    setPriceMin(value?.priceMin ?? "");
+    setPriceMax(value?.priceMax ?? "");
   }, [value]);
 
-  // accordion state
+  // accordion state (persist in localStorage)
   const [open, setOpen] = useState(() => {
     try {
       const raw = localStorage.getItem("ys_filters_open_v1");
@@ -50,12 +57,18 @@ export default function FiltersSidebar({ value, onApply, onReset, brands = [] })
   const toggle = (k) => setOpen((p) => ({ ...p, [k]: !p[k] }));
 
   // dirty flag
-  const dirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(value), [draft, value]);
+  const dirty = useMemo(() => {
+    const draftWithPrice = {
+      ...draft,
+      priceMin: priceMin === "" ? null : Number(priceMin),
+      priceMax: priceMax === "" ? null : Number(priceMax),
+    };
+    return JSON.stringify(draftWithPrice) !== JSON.stringify(value);
+  }, [draft, priceMin, priceMax, value]);
 
-  // Default brands if not provided
+  // бренды из props или дефолтные
   const BRANDS = brands.length > 0 ? brands : [
-    "Apple", "Samsung", "Xiaomi", "Lenovo", "HP", 
-    "Sony", "LG", "Asus", "Acer", "Philips"
+    "Apple", "Samsung", "Xiaomi", "Lenovo", "HP", "Sony", "LG", "Asus", "Acer", "Philips"
   ];
 
   const setBrand = (b, checked) => {
@@ -65,19 +78,38 @@ export default function FiltersSidebar({ value, onApply, onReset, brands = [] })
   };
 
   const apply = () => {
-    onApply?.(draft);
+    const finalFilters = {
+      ...draft,
+      priceMin: priceMin === "" ? null : clampNum(priceMin, 0, 999999),
+      priceMax: priceMax === "" ? null : clampNum(priceMax, 0, 999999),
+    };
+    onApply?.(finalFilters);
   };
 
   const reset = () => {
+    setPriceMin("");
+    setPriceMax("");
+    setDraft({
+      q: "",
+      brands: [],
+      inStock: false,
+      rating: null,
+      priceMin: null,
+      priceMax: null,
+      sort: "pop",
+      category: value?.category || "",
+    });
     onReset?.();
   };
 
   return (
     <div className="ys-filters">
-      <div className="ys-filters-head">
-        <div>
-          <div className="ys-filters-title">Фільтри</div>
-          <div className="ys-filters-sub">Налаштуйте під себе</div>
+      <div className="ys-filters__top">
+        <div className="ys-filters-head">
+          <div>
+            <div className="ys-filters-title">Фільтри</div>
+            <div className="ys-filters-sub">Налаштуйте під себе</div>
+          </div>
         </div>
 
         <div className="ys-filters__actions">
@@ -86,57 +118,57 @@ export default function FiltersSidebar({ value, onApply, onReset, brands = [] })
             className="ys-btn ys-btn-primary"
             disabled={!dirty}
             onClick={apply}
+            style={{ height: 40, borderRadius: 12, padding: "0 16px" }}
           >
             Показати
           </button>
-          <button type="button" className="ys-btn ys-btn-secondary" onClick={reset}>
+          <button 
+            type="button" 
+            className="ys-btn ys-btn-ghost" 
+            onClick={reset}
+            style={{ height: 40, borderRadius: 12, padding: "0 16px" }}
+          >
             Скинути
           </button>
         </div>
       </div>
 
       <Section title="Ціна" open={open.price} onToggle={() => toggle("price")}>
-        <div className="ys-filter-grid2">
-          <label className="ys-field">
-            <span>Від</span>
+        <div className="ys-filter-row">
+          <div>
+            <label style={{ fontSize: 12, color: "#6b7280", marginBottom: 4, display: "block" }}>Від</label>
             <input
-              value={draft?.priceMin ?? ""}
-              onChange={(e) =>
-                setDraft({ ...draft, priceMin: clampNum(e.target.value, 0, 999999) })
-              }
+              className="ys-input"
+              value={priceMin}
+              onChange={(e) => setPriceMin(e.target.value.replace(/[^\d]/g, ""))}
               inputMode="numeric"
               placeholder="0"
-              className="ys-input"
             />
-          </label>
-
-          <label className="ys-field">
-            <span>До</span>
+          </div>
+          <div>
+            <label style={{ fontSize: 12, color: "#6b7280", marginBottom: 4, display: "block" }}>До</label>
             <input
-              value={draft?.priceMax ?? ""}
-              onChange={(e) =>
-                setDraft({ ...draft, priceMax: clampNum(e.target.value, 0, 999999) })
-              }
+              className="ys-input"
+              value={priceMax}
+              onChange={(e) => setPriceMax(e.target.value.replace(/[^\d]/g, ""))}
               inputMode="numeric"
               placeholder="999999"
-              className="ys-input"
             />
-          </label>
+          </div>
         </div>
         <div className="ys-hint">Вкажіть діапазон та натисніть "Показати"</div>
       </Section>
 
       <Section title="Бренд" open={open.brand} onToggle={() => toggle("brand")}>
-        <div className="ys-brand-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div className="ys-brand-list">
           {BRANDS.map((b) => {
             const checked = (draft?.brands || []).includes(b);
             return (
-              <label key={b} className="ys-check" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <label key={b} className="ys-check">
                 <input
                   type="checkbox"
                   checked={checked}
                   onChange={(e) => setBrand(b, e.target.checked)}
-                  data-testid={`brand-filter-${b.toLowerCase()}`}
                 />
                 <span>{b}</span>
               </label>
@@ -172,7 +204,7 @@ export default function FiltersSidebar({ value, onApply, onReset, brands = [] })
       </Section>
 
       <Section title="Сортування" open={open.sort} onToggle={() => toggle("sort")}>
-        <div className="ys-filter-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div className="ys-brand-list">
           {[
             { id: "pop", label: "Популярні" },
             { id: "new", label: "Нові" },
@@ -195,10 +227,21 @@ export default function FiltersSidebar({ value, onApply, onReset, brands = [] })
 
       {/* Mobile bottom bar */}
       <div className="ys-filters__bottom">
-        <button type="button" className="ys-btn ys-btn-primary ys-btn-full" disabled={!dirty} onClick={apply}>
+        <button 
+          type="button" 
+          className="ys-btn ys-btn-primary" 
+          disabled={!dirty} 
+          onClick={apply}
+          style={{ flex: 1, height: 44, borderRadius: 12 }}
+        >
           Показати
         </button>
-        <button type="button" className="ys-btn ys-btn-secondary ys-btn-full" onClick={reset}>
+        <button 
+          type="button" 
+          className="ys-btn ys-btn-ghost" 
+          onClick={reset}
+          style={{ height: 44, borderRadius: 12, padding: "0 16px" }}
+        >
           Скинути
         </button>
       </div>
