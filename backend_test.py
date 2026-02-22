@@ -131,7 +131,13 @@ class YStoreAPITester:
         success, data, status_code = self.test_api_endpoint("GET", "categories")
         
         if success:
-            categories = data.get("categories", data if isinstance(data, list) else [])
+            # Handle different response formats
+            if isinstance(data, list):
+                categories = data
+            elif isinstance(data, dict):
+                categories = data.get("categories", data.get("items", []))
+            else:
+                categories = []
             
             if len(categories) > 0:
                 self.log_result(
