@@ -75,8 +75,16 @@ class YStoreAPITester:
         success, data, status_code = self.test_api_endpoint("GET", "products")
         
         if success:
-            products = data.get("products", data.get("items", []))
-            total = data.get("total", len(products))
+            # Handle different response formats
+            if isinstance(data, list):
+                products = data
+                total = len(products)
+            elif isinstance(data, dict):
+                products = data.get("products", data.get("items", []))
+                total = data.get("total", len(products))
+            else:
+                products = []
+                total = 0
             
             if len(products) >= 40:
                 self.log_result(
