@@ -225,9 +225,9 @@ export default function ProductPageV4() {
         </nav>
 
         {/* Main Product Grid */}
-        <div className="ys-pdp-grid">
+        <div className="ys-pdp-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '32px', alignItems: 'start' }}>
           {/* Left: Gallery */}
-          <div className="ys-pdp-gallery">
+          <div className="ys-pdp-gallery" style={{ position: 'sticky', top: '100px' }}>
             <GalleryZoom images={images} />
           </div>
 
