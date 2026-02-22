@@ -3508,12 +3508,6 @@ button {
   margin: 0;
 }
 
-  align-items: center;
-  justify-content: center;
-  color: #6b7280;
-  flex-shrink: 0;
-}
-
 .ys-search-row-content{
   display: flex;
   flex-direction: column;
