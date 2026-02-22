@@ -7,8 +7,8 @@
 ## Статус проекта: ✅ ПОЛНОСТЬЮ РАБОТАЕТ
 
 ### Ключевые URL
-- **Frontend**: https://full-stack-setup-18.preview.emergentagent.com
-- **API**: https://full-stack-setup-18.preview.emergentagent.com/api
+- **Frontend**: https://retail-upgrade-9.preview.emergentagent.com
+- **API**: https://retail-upgrade-9.preview.emergentagent.com/api
 - **Admin**: /admin
 - **Telegram Bot**: @YStore_a_bot
 

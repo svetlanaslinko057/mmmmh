@@ -12,7 +12,7 @@
     ],
     "infrastructure_issues": [
       {
-        "service": "External URL (https://ecom-search-v2.preview.emergentagent.com)",
+        "service": "External URL (https://retail-upgrade-9.preview.emergentagent.com)",
         "issue": "Returns Error 520 - Web server unknown error",
         "impact": "External URL not accessible, but local development works",
         "fix_priority": "MEDIUM",
@@ -53,7 +53,7 @@
     "/app/test_reports/backend_test_results.json"
   ],
   "action_item_for_main_agent": {
-    "infrastructure": "External URL (https://ecom-search-v2.preview.emergentagent.com) returning Error 520 - contact infrastructure team to resolve",
+    "infrastructure": "External URL (https://retail-upgrade-9.preview.emergentagent.com) returning Error 520 - contact infrastructure team to resolve",
     "optional_fixes": [
       "Create default admin user for admin login functionality",
       "Add z-index management to prevent modal overlay testing issues"

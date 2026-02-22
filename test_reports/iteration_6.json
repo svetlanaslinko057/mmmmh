@@ -6,7 +6,7 @@
     "configuration_issues": [
       {
         "issue": "External preview URL not accessible - requires localhost testing",
-        "endpoint": "https://ecom-search-v2.preview.emergentagent.com",
+        "endpoint": "https://retail-upgrade-9.preview.emergentagent.com",
         "workaround": "Use localhost:8001 for backend testing",
         "fix_priority": "LOW"
       }

@@ -7,7 +7,7 @@
     "routing_issues": [
       {
         "issue": "External URL routing not working",
-        "description": "Public URL https://ecom-search-v2.preview.emergentagent.com points to Emergent main page instead of deployed app",
+        "description": "Public URL https://retail-upgrade-9.preview.emergentagent.com points to Emergent main page instead of deployed app",
         "impact": "Users cannot access the application via public URL",
         "fix_priority": "HIGH"
       }

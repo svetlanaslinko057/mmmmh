@@ -11,7 +11,7 @@ from datetime import datetime
 import time
 
 # Use public endpoint from frontend env
-BASE_URL = "https://full-stack-setup-18.preview.emergentagent.com"
+BASE_URL = "https://retail-upgrade-9.preview.emergentagent.com"
 API_BASE = f"{BASE_URL}/api"
 
 class YStoreAPITester:

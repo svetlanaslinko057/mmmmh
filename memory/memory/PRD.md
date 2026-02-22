@@ -63,7 +63,7 @@
 **Backend**: RUNNING ✅ (localhost:8001)
 **Frontend**: RUNNING ✅ (localhost:3000)
 **MongoDB**: RUNNING ✅
-**Preview**: https://ecom-search-v2.preview.emergentagent.com
+**Preview**: https://retail-upgrade-9.preview.emergentagent.com
 
 ### Test Results
 - Backend APIs: 100% working locally
@@ -71,7 +71,7 @@
 - CSS animations: Verified (animate-fadeIn, animate-scaleIn, btn-primary)
 
 ## URLs
-- **Preview**: https://ecom-search-v2.preview.emergentagent.com
+- **Preview**: https://retail-upgrade-9.preview.emergentagent.com
 - **API Health**: /api/health
 - **Home**: / (with all V2-20 components)
 
