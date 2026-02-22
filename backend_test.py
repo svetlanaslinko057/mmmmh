@@ -190,12 +190,17 @@ class YStoreAPITester:
             data=login_data
         )
         
-        if success and "token" in data:
-            self.token = data["token"]
+        # Check for both token formats
+        token = None
+        if success:
+            token = data.get("token") or data.get("access_token")
+        
+        if success and token:
+            self.token = token
             self.log_result(
                 "Admin Login",
                 True,
-                "Successfully logged in as admin, received token"
+                f"Successfully logged in as admin, received token. User role: {data.get('user', {}).get('role', 'unknown')}"
             )
             return True
         else:
