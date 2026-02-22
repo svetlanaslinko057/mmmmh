@@ -294,7 +294,7 @@ export default function SearchInput({ className = "", onClose }) {
                         isActive ? "bg-blue-100 text-blue-600" : "bg-gray-100 hover:bg-blue-100 hover:text-blue-600"
                       }`}
                     >
-                      <Highlight text={c.name || ""} query={q} />
+                      <Highlight text={c.title || c.name || ""} query={q} />
                     </button>
                   );
                 })}
