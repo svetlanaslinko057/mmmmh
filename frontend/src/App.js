@@ -61,6 +61,8 @@ import SearchResults from './pages/SearchResults';
 // V2-19: Compare and Wishlist Pages
 import ComparePage from './pages/ComparePage';
 import WishlistPage from './pages/WishlistPage';
+// B12: Product Page V4
+import ProductPageV4 from './pages/ProductPageV4';
 import './App.css';
 
 // Analytics Wrapper Component
