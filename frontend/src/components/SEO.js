@@ -68,7 +68,7 @@ const SEO = ({
     <Helmet>
       {/* Primary Meta Tags */}
       <title>{safeTitle}</title>
-      <meta name="title" content={title} />
+      <meta name="title" content={safeTitle} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       
