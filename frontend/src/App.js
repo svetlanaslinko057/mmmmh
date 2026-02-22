@@ -105,7 +105,7 @@ function App() {
                           <Route path="/auth-callback" element={<AuthCallback />} />
                           <Route path="/products" element={<Products />} />
                           <Route path="/catalog" element={<CatalogV3 />} />
-                          <Route path="/product/:id" element={<ProductPageV3 />} />
+                          <Route path="/product/:id" element={<ProductPageV4 />} />
                           <Route path="/offer/:offerId" element={<OfferDetail />} />
                           <Route path="/favorites" element={<Favorites />} />
                           <Route path="/wishlist" element={<Favorites />} />
