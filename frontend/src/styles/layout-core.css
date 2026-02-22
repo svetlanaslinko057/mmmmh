@@ -2768,24 +2768,24 @@ button {
   text-decoration: underline;
 }
 
-.ys-product-grid{
+.ys-pdp-grid{
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 32px;
   align-items: start;
 }
 @media (max-width: 980px){
-  .ys-product-grid{
+  .ys-pdp-grid{
     grid-template-columns: 1fr;
   }
 }
 
-.ys-product-gallery{
+.ys-pdp-gallery{
   position: sticky;
   top: 100px;
 }
 @media (max-width: 980px){
-  .ys-product-gallery{
+  .ys-pdp-gallery{
     position: relative;
     top: 0;
   }
