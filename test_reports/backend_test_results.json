@@ -1,58 +1,65 @@
 {
-  "timestamp": "2026-02-22T10:18:12.890335",
+  "timestamp": "2026-02-22T10:18:45.958963",
   "base_url": "https://full-stack-setup-18.preview.emergentagent.com",
-  "total_tests": 7,
-  "passed_tests": 3,
-  "failed_tests": 4,
-  "success_rate": 42.9,
+  "total_tests": 8,
+  "passed_tests": 7,
+  "failed_tests": 1,
+  "success_rate": 87.5,
   "results": [
     {
       "test": "Products API - Count Check",
       "success": true,
       "message": "Found 40 products (\u226540 as expected), total: 40",
-      "timestamp": "2026-02-22T10:18:12.421642",
+      "timestamp": "2026-02-22T10:18:45.395247",
       "data": null
     },
     {
       "test": "Products API - Structure",
-      "success": false,
-      "message": "Products missing fields: ['name']",
-      "timestamp": "2026-02-22T10:18:12.421676",
+      "success": true,
+      "message": "Products have required fields (id, title, price)",
+      "timestamp": "2026-02-22T10:18:45.395280",
       "data": null
     },
     {
       "test": "Categories API",
       "success": true,
       "message": "Found 41 categories",
-      "timestamp": "2026-02-22T10:18:12.473776",
+      "timestamp": "2026-02-22T10:18:45.448557",
       "data": null
     },
     {
       "test": "Categories API - Structure",
       "success": true,
       "message": "Categories have name field",
-      "timestamp": "2026-02-22T10:18:12.473811",
+      "timestamp": "2026-02-22T10:18:45.448586",
       "data": null
     },
     {
       "test": "Search API - Empty Query",
       "success": false,
       "message": "Search API failed for empty query: Status 422",
-      "timestamp": "2026-02-22T10:18:12.532833",
+      "timestamp": "2026-02-22T10:18:45.502106",
       "data": null
     },
     {
       "test": "Search Suggestions - Samsung",
-      "success": false,
-      "message": "No Samsung products found in suggestions. Total products: 6",
-      "timestamp": "2026-02-22T10:18:12.588812",
+      "success": true,
+      "message": "Found 6 Samsung products in suggestions",
+      "timestamp": "2026-02-22T10:18:45.560962",
       "data": null
     },
     {
       "test": "Admin Login",
-      "success": false,
-      "message": "Login failed: Status 200, Data: {'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmI2YzllZS04MDZhLTQ3NWEtOTFhYi1lOTMxOGZmOTkyYmEiLCJleHAiOjE3NzIzNjAyOTJ9.WfPCEx5IdAJfNMiIZJGEASJxmYu5r0XhKG4MIFvLMKE', 'token_type': 'bearer', 'user': {'id': '62b6c9ee-806a-475a-91ab-e9318ff992ba', 'email': 'admin@ystore.com', 'full_name': 'Admin User', 'role': 'admin', 'created_at': '2026-02-22T10:00:09.499081Z', 'company_name': None, 'verified': False, 'phone': None, 'address': None, 'city': None, 'region': None, 'postal_code': None, 'delivery_method': 'nova_poshta', 'np_department': None, 'delivery_notes': None}}",
-      "timestamp": "2026-02-22T10:18:12.890289",
+      "success": true,
+      "message": "Successfully logged in as admin, received token. User role: admin",
+      "timestamp": "2026-02-22T10:18:45.846778",
+      "data": null
+    },
+    {
+      "test": "Admin Users",
+      "success": true,
+      "message": "Admin users endpoint accessible",
+      "timestamp": "2026-02-22T10:18:45.958916",
       "data": null
     }
   ]
