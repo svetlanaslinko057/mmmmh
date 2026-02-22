@@ -1,104 +1,143 @@
-# Y-Store Marketplace - PRD V4.0
+# Y-Store Marketplace - PRD v5.0
 
-## RETAIL LAYOUT CORE v1 - Завершено ✅
-
-### Что создано
-**Новый чистый фундамент** - изолированная система layout без старого мусора.
-
-### Файлы
-- `/frontend/src/styles/layout-core.css` - единый источник layout (~1600 строк)
-- `/frontend/src/components/layout/HeaderCore.jsx` - чистый Header
-- Все старые layout классы заменены на `ys-*`
-
-### CSS Архитектура
-
-```
-layout-core.css
-├── RESET (box-sizing, margins)
-├── CONTAINER (.ys-container max-width: 1280px)
-├── SECTION (.ys-section padding: 40px 0)
-├── HEADER (.ys-header fixed, top: 0)
-│   ├── .ys-header-top (72px)
-│   ├── .ys-header-bottom (52px)
-│   ├── .ys-header-search
-│   └── .ys-header-icons
-├── GRID (.ys-grid-4, .ys-grid-3, .ys-grid-2, .ys-grid-6)
-├── CARD (.ys-card with .ys-card-footer: margin-top: auto)
-├── BUTTON (.ys-btn, .ys-btn-primary, .ys-btn-success)
-├── HERO (.ys-hero)
-├── CATEGORIES (.ys-categories-grid)
-├── ADVANTAGES (.ys-advantages, .ys-advantages-grid)
-├── DEAL OF DAY (.ys-deal)
-├── TESTIMONIALS (.ys-testimonials-grid)
-├── CART DRAWER (.ys-drawer)
-├── NEWSLETTER (.ys-newsletter)
-├── CATALOG (.ys-catalog with sidebar grid)
-└── FOOTER (.ys-footer)
-```
+## Дата обновления: 22.02.2026
 
 ---
 
-## CatalogV3 - Завершено ✅ (22.02.2026)
+## Статус проекта: ✅ DEPLOYED & RUNNING
 
-### Что реализовано
+### Ключевые данные
+- **Frontend URL**: https://full-stack-setup-18.preview.emergentagent.com
+- **Backend URL**: https://full-stack-setup-18.preview.emergentagent.com/api
+- **Admin URL**: /admin (требует авторизации)
+- **Test Admin**: admin@ystore.com / Admin123!
 
-#### Backend API (P0 - Готово)
-- `/api/v2/catalog` - список товаров с фильтрами, сортировкой, пагинацией
-- `/api/v2/catalog/filters` - доступные фильтры (бренды, цены)
-- `/api/v2/catalog/facets` - категории, бренды, ценовой диапазон
-- `/api/v2/search/suggest` - поисковые подсказки
+---
 
-#### Frontend Components (P0 - Готово)
-- `CatalogV3.jsx` - главная страница каталога с grid layout
-- `FiltersSidebar.jsx` - боковая панель фильтров (цена, бренд, наличие, рейтинг, сортировка)
-- `ActiveFilterChips.jsx` - чипсы активных фильтров
-- `Pagination.jsx` - пагинация с умным отображением страниц
-- `ProductSkeletonGrid.jsx` - скелетоны загрузки
+## Архитектура
 
-#### API Integration
-- `products.js` - fetchProducts, fetchFacets, fetchSuggest
-- `urlFilters.js` - parseFiltersFromSearch, buildSearchFromFilters
+### Backend (FastAPI + MongoDB)
+```
+/app/backend/
+├── server.py          # Главный FastAPI сервер (~143KB)
+├── modules/           # Модули по функционалу
+│   ├── auth/          # Авторизация (JWT + Google OAuth)
+│   ├── catalog/       # Каталог API v2
+│   ├── products/      # Управление товарами
+│   ├── orders/        # Заказы + state machine
+│   ├── payments/      # Fondy интеграция
+│   ├── delivery/      # Nova Poshta интеграция
+│   ├── bot/           # Telegram Admin Bot
+│   ├── admin/         # Админ API
+│   ├── analytics/     # Аналитика + воронки
+│   ├── crm/           # CRM система
+│   └── ...            # 36+ модулей
+├── requirements.txt   # Python зависимости
+└── .env              # Конфигурация
+```
 
-### Тестирование
-- ✅ Backend: 100% успех (pytest)
-- ✅ Frontend: 95% успех (Playwright)
-- ✅ API endpoints работают корректно
-- ✅ Фильтрация по цене, сортировка, пагинация
-
-### Известные ограничения
-- Товары в базе не имеют поля `brand` - фильтрация по бренду вернёт 0 результатов
-- Всего 4 товара в базе для тестирования
+### Frontend (React 19 + Tailwind)
+```
+/app/frontend/src/
+├── pages/             # Страницы
+│   ├── Home.js        # Главная
+│   ├── CatalogV3.jsx  # Каталог с фильтрами
+│   ├── ProductPageV3.jsx
+│   ├── AdminPanel.js  # Админка
+│   └── ...
+├── components/        # UI компоненты
+│   ├── layout/        # HeaderCore, Footer
+│   ├── catalog/       # FiltersSidebar, Pagination
+│   ├── admin/         # Admin dashboards
+│   └── ui/            # Radix UI компоненты
+├── contexts/          # React Context (Auth, Cart, etc)
+├── styles/            # CSS
+│   └── layout-core.css # Retail Layout Core v1
+└── utils/             # API, helpers
+```
 
 ---
 
 ## Интеграции
 
-| Сервис | Статус |
-|--------|--------|
-| Telegram Bot | ✅ |
-| Nova Poshta | ✅ |
-| Fondy | ✅ |
-| MongoDB | ✅ |
+| Сервис | Статус | Credentials |
+|--------|--------|-------------|
+| MongoDB | ✅ | localhost:27017 / test_database |
+| Telegram Bot | ✅ | 8239151803:AAFBBu... |
+| Nova Poshta | ✅ | 5cb1e3ebc23e75d737fd57c1e056ecc9 |
+| Fondy Payments | ✅ | Merchant ID: 1558123 |
 
-## Credentials
-- Test User: test@ystore.com / Test123!
-- Backend: http://localhost:8001
-- Frontend: http://localhost:3000
+---
+
+## Что реализовано
+
+### ✅ P0 - Core Features
+- [x] Frontend + Backend deployed
+- [x] MongoDB подключена
+- [x] JWT авторизация
+- [x] Каталог товаров с фильтрами (CatalogV3)
+- [x] Карточки товаров
+- [x] Админ-панель с полным функционалом
+- [x] 41 категорий + 40 товаров (seeded)
+
+### ✅ Админ-панель включает:
+- Аналітика (дашборд)
+- Управление пользователями
+- Управление товарами
+- Управление категориями
+- Выплаты
+- Замовлення (заказы)
+- CRM система
+- Слайдер (баннеры)
+- Акції (промо)
+- Популярні категорії
+- Кастомні розділи
+- Відгуки (отзывы)
+- Повернення (возвраты)
+- Політики
+- Payment Health
+- Risk Center
+- Revenue Control
+- A/B Tests
 
 ---
 
 ## Backlog
 
-### P1 - Следующие задачи
-- [ ] MegaMenu для категорий в HeaderCore
-- [ ] Поисковая строка с live suggestions
-- [ ] Страница товара ProductPageV4
+### 🟡 P1 - Следующие задачи (из вашего Layout Core v2)
+- [ ] Layout Core v2 — Catalog Sidebar Grid
+- [ ] FiltersSidebar v2 (Apply/Reset + Collapses)
+- [ ] URL state для фильтров
+- [ ] Products API Filters + Search Suggest
+- [ ] Active Filter Chips
+- [ ] Pagination + Skeleton loading
+- [ ] Search 2.1 (<300ms)
 
-### P2 - Улучшения
-- [ ] Добавить бренды к товарам в базе
-- [ ] SEO оптимизация каталога
-- [ ] Responsive улучшения для мобильных
-- [ ] Cart V3 upsells
+### 🟢 P2 - Улучшения
+- [ ] MegaMenu для категорий
+- [ ] Mobile responsive улучшения
+- [ ] SEO оптимизация (fix Helmet issue)
+- [ ] Telegram Bot запуск
 
-### Known Issues
-- Tailwind CSS перезаписывает ys-* стили - используются inline styles для критичных layout
+---
+
+## Known Issues
+- ❌ SEO Helmet компоненты временно отключены (ошибка с title)
+- ⚠️ Welcome Modal показывается на каждой странице
+
+---
+
+## Credentials
+
+### Admin User
+- Email: admin@ystore.com
+- Password: Admin123!
+- Role: admin
+
+### API Endpoints
+- Health: GET /api/health
+- Products: GET /api/products
+- Categories: GET /api/categories
+- Catalog V2: GET /api/v2/catalog
+- Auth: POST /api/auth/login, /api/auth/register
+
