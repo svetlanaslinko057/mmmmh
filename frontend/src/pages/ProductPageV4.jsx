@@ -225,9 +225,9 @@ export default function ProductPageV4() {
         </nav>
 
         {/* Main Product Grid */}
-        <div className="ys-product-grid">
+        <div className="ys-pdp-grid">
           {/* Left: Gallery */}
-          <div className="ys-product-gallery">
+          <div className="ys-pdp-gallery">
             <GalleryZoom images={images} />
           </div>
 
