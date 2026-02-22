@@ -243,7 +243,12 @@ class YStoreAPITester:
             categories = data.get("categories", [])
             popular = data.get("popular", [])
             
-            samsung_products = [p for p in products if "samsung" in p.get("name", "").lower()]
+            # Check for Samsung in title or name field
+            samsung_products = []
+            for p in products:
+                product_name = p.get("title") or p.get("name", "")
+                if "samsung" in product_name.lower():
+                    samsung_products.append(p)
             
             if samsung_products:
                 self.log_result(
