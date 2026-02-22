@@ -131,11 +131,6 @@ export default function CatalogV3() {
 
   return (
     <>
-      <SEO 
-        title={`${texts.catalog} - Y-Store`}
-        description="Каталог товарів Y-Store. Смартфони, ноутбуки, електроніка за найкращими цінами."
-      />
-      
       <div className="ys-page">
         <section className="ys-section">
           <div className="ys-container">
