@@ -1,4 +1,4 @@
-# Y-Store Marketplace - PRD v5.1
+# Y-Store Marketplace - PRD v6.0
 
 ## Дата обновления: 22.02.2026
 
@@ -19,51 +19,62 @@
 
 ## Что реализовано
 
+### ✅ B8 - ProductCard Polish (22.02.2026)
+- Новый retail-стиль карточек товаров
+- Скелетоны загрузки (ProductCardSkeleton)
+- Скидки (-11%, -10%, etc.), рейтинги, статус наличия
+- Кнопка сравнения на карточках
+
+### ✅ B9 - Homepage Retail 4.0 (22.02.2026)
+- PromoTiles: 4 информационных плитки (Доставка, Гарантія, Оплата, Швидке оформлення)
+- MiniBannersRow: 3 промо-баннера (Топ смартфони, Ноутбуки, Розумний дім)
+- Foxtrot-style верстка главной страницы
+
+### ✅ B10 - Catalog 3.0 + URL State (22.02.2026)
+- Фильтры по цене, бренду, наличию, рейтингу
+- Сортировка (популярні, новинки, ціна ↑↓, рейтинг)
+- URL state: все фильтры синхронизируются с URL
+- ActiveFilterChips с возможностью удаления
+- Пагинация
+
+### ✅ B11 - Search 2.1 API (22.02.2026)
+- `/api/v2/search/suggest` - возвращает товары, категории, популярные запросы
+- `/api/v2/products/search` - полный поиск с фильтрами
+- Debounce ~200ms, abort previous requests
+
+### ✅ B12 - ProductPageV4 (22.02.2026)
+- Grid layout (галерея слева, buy panel справа)
+- Zoom функционал для изображений
+- Trust strip (Доставка, Гарантія, Обмін, Оплата)
+- Табы: Опис, Характеристики, Відгуки
+- Sticky buy bar при прокрутке
+- Related products секция
+
 ### ✅ P0 - SEO/Helmet Fix
 - SEO компоненты исправлены для React 19 + react-helmet-async
-- Временно отключены Schema.org компоненты (OrganizationSchema, WebSiteSchema) из-за конфликта
-
-### ✅ P1 - Layout Core v2 (Catalog Sidebar Grid)
-- Sidebar с фильтрами (280px) + сетка товаров (4 колонки)
-- Sticky sidebar на desktop
-- Mobile responsive (drawer на мобильных)
-- CSS классы: .ys-catalog, .ys-catalog-sidebar, .ys-catalog-main
-
-### ✅ P1 - FiltersSidebar v2 + URL state + Active Chips
-- Аккордеоны по секциям (Ціна/Бренд/Наявність/Рейтинг/Сортування)
-- Apply/Reset кнопки (черновик → применить)
-- URL state: все фильтры синхронизируются с URL
-- ActiveFilterChips: показывает активные фильтры с возможностью удаления
-- Pagination с умным отображением страниц
-- ProductSkeletonGrid для loading state
-
-### ✅ P1 - Search 2.1 с подсказками
-- Live search с debounce ~200ms
-- Keyboard navigation (↑/↓/Enter/Escape)
-- Highlight совпадений
-- Recent searches (localStorage)
-- Показывает товары с картинками и ценами
+- Schema.org компоненты временно отключены
 
 ### ✅ P2 - Telegram Bot
-- Бот запущен: @YStore_a_bot (PID: 3917)
+- Бот запущен: @YStore_a_bot
 - Функционал: управление заказами, аналитика
 
 ---
 
-## Тестирование (iteration_12)
+## Тестирование (iteration_13)
 
-### Backend: 87.5% ✅
+### Backend: 100% ✅ (21/21 тестов)
 - /api/products - 40 товаров
 - /api/categories - 41 категория
-- /api/v2/search/suggest - подсказки работают
+- /api/v2/search/suggest - работает с категориями и популярными запросами
+- /api/v2/products/search - фильтры и сортировка работают
 - /api/auth/login - авторизация работает
 
-### Frontend: 85% ✅
-- Главная страница ✅
-- Каталог с Layout Core v2 ✅
-- Фильтры sidebar ✅
-- Поиск с подсказками ✅
-- Админка ✅
+### Frontend: 100% ✅
+- B8 ProductCard polish ✅
+- B9 Homepage PromoTiles + MiniBanners ✅
+- B10 Catalog фильтры + URL state ✅
+- B11 Search API ✅
+- B12 ProductPageV4 ✅
 
 ---
 
@@ -80,29 +91,44 @@
 
 ## Known Issues (Low Priority)
 - SEO Schema компоненты временно отключены
-- /api/v2/search/suggest возвращает 422 для пустого query
-- Console показывает 401 errors при навигации (не критично)
+- Brand фильтр возвращает 0 товаров (продукты не имеют brand field)
+- Console показывает 401 errors для неавторизованных запросов
+- React hydration warning в CatalogV3 sort dropdown
 
 ---
 
-## Next Action Items
+## Next Action Items (P1)
+1. **B13** - Catalog 3.0 refinements (URL state finalization)
+2. **B14** - Search 2.1 (mobile full-screen, keyboard navigation)
+3. MegaMenu для категорий
+4. Mobile responsive улучшения
+
+## Future Tasks (P2)
 1. Восстановить Schema.org компоненты (SEO)
-2. MegaMenu для категорий
-3. Mobile responsive улучшения
-4. Checkout V3 улучшения
+2. Checkout V3 улучшения
+3. Добавить brand field в продукты
+4. Wishlist improvements
 
 ---
 
 ## Архитектура
 
-### Backend Modules (36+)
-- auth, catalog, products, orders, payments
-- delivery (Nova Poshta), bot (Telegram)
-- admin, analytics, crm, wishlist, reviews
-- И другие...
+### Frontend Components (B8-B12)
+- `/src/components/ProductCardCompact.js` - карточка товара
+- `/src/components/catalog/ProductCardSkeleton.jsx` - скелетон
+- `/src/components/home/PromoTiles.jsx` - промо плитки
+- `/src/components/home/MiniBannersRow.jsx` - мини-баннеры
+- `/src/components/product/GalleryZoom.jsx` - галерея с zoom
+- `/src/components/product/ProductTabs.jsx` - табы товара
+- `/src/components/product/BuyTogether.jsx` - "купують разом"
+- `/src/components/product/StickyBuyBar.jsx` - sticky панель
+- `/src/pages/ProductPageV4.jsx` - страница товара V4
+- `/src/pages/CatalogV3.jsx` - каталог V3
 
-### Frontend Stack
-- React 19 + react-router-dom
-- Tailwind CSS + layout-core.css
-- Radix UI components
-- Lucide React icons
+### Backend Endpoints
+- `GET /api/v2/search/suggest` - подсказки поиска
+- `GET /api/v2/products/search` - поиск с фильтрами
+- `GET /api/v2/products/{id}/related` - похожие товары
+
+### CSS
+- `/src/styles/layout-core.css` - основные стили B8-B12
